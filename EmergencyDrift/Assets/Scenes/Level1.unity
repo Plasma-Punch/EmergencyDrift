@@ -26542,13 +26542,14 @@ MonoBehaviour:
     constantValue: 0
     variable: {fileID: 11400000, guid: 4d329fddb49811c48b52fa4fb2ea0b9d, type: 2}
   _debtUI: {fileID: 309041316}
-  _shopUI: {fileID: 915536398}
   _updateMoney: {fileID: 11400000, guid: 56b8603547ef86d459f746e85b606c13, type: 2}
   _equipmentButton: {fileID: 213233756}
   _infrastructureButton: {fileID: 582800506}
   _supliesButton: {fileID: 207448088}
   _experimentsButton: {fileID: 709041864}
   _gameWon: {fileID: 11400000, guid: 63daa9bb0f46c904bb35704a5364eebe, type: 2}
+  _OpenMenu: {fileID: 8074754469209887584, guid: e2668238327d6c043a528ee781cf664a, type: 3}
+  _CloseMenu: {fileID: 6615116844442135379, guid: e2668238327d6c043a528ee781cf664a, type: 3}
 --- !u!4 &872271317
 Transform:
   m_ObjectHideFlags: 0
@@ -35284,78 +35285,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3165756947429540171, guid: 0ff0f5c3302eee844945115bfe13f943, type: 3}
   m_PrefabInstance: {fileID: 154301131}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1218352086
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1218352088}
-  - component: {fileID: 1218352087}
-  m_Layer: 0
-  m_Name: ShopManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1218352087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1218352086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b923c8eebaf04f7449b94e0282eca3be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ambulancePrice: 290
-  _speedPrice: 120
-  _radarPrice: 540
-  _upgradeMultiplier: 1.2
-  _money:
-    useConstant: 0
-    constantValue: 0
-    variable: {fileID: 11400000, guid: 4d329fddb49811c48b52fa4fb2ea0b9d, type: 2}
-  _ambulanceCount:
-    useConstant: 0
-    constantValue: 0
-    variable: {fileID: 11400000, guid: 6e67caeb088722e48bd3e7e5f3e02228, type: 2}
-  _speed:
-    useConstant: 0
-    constantValue: 0
-    variable: {fileID: 11400000, guid: cf2d5f7a43726584c89d7131d78862a3, type: 2}
-  _maxSpeed:
-    useConstant: 0
-    constantValue: 0
-    variable: {fileID: 11400000, guid: e6a9fe15ee2448c4281003d29a8b6007, type: 2}
-  _radar: {fileID: 510845064}
-  _shop: {fileID: 915536398}
-  _debtScreen: {fileID: 309041316}
-  _ambulanceButton: {fileID: 1680307262}
-  _speedButton: {fileID: 1842917295}
-  _radarButton: {fileID: 1602035845}
-  _boughtAmbulance: {fileID: 11400000, guid: 4c9d51596a07cbc44b5d7b5d95b99141, type: 2}
-  _updateMoney: {fileID: 11400000, guid: 56b8603547ef86d459f746e85b606c13, type: 2}
---- !u!4 &1218352088
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1218352086}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 813.87, y: 571.8316, z: -878.11786}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1218862149 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8437557469370930624, guid: 8adadfa643c87f74bb2402c31a4e577c, type: 3}
@@ -46113,7 +46042,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1218352087}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
         m_MethodName: BuyRadar
         m_Mode: 1
@@ -48332,7 +48261,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1218352087}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
         m_MethodName: BuyAmbulance
         m_Mode: 1
@@ -53164,7 +53093,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1218352087}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
         m_MethodName: BuySpeed
         m_Mode: 1
@@ -61403,7 +61332,6 @@ SceneRoots:
   - {fileID: 557040140}
   - {fileID: 539656162}
   - {fileID: 1561506938}
-  - {fileID: 1218352088}
   - {fileID: 872271317}
   - {fileID: 70137918}
   - {fileID: 1469251533}
