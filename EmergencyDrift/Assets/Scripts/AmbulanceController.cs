@@ -72,9 +72,9 @@ public class AmbulanceController : MonoBehaviour
         float damage = speed * _collisionMultiplier;
 
         // push player away from collision
-        Vector3 direction = transform.position - collision.transform.position;
-        direction.y = 0;
-        _rb.AddForce(direction * _bounciness, ForceMode.Impulse);
+        //Vector3 direction = transform.position - collision.transform.position;
+        //direction.y = 0;
+        //_rb.AddForce(direction * _bounciness, ForceMode.Impulse);
 
 
         //Debug.Log(damage);
