@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,7 +15,6 @@ public class DebtManager : MonoBehaviour
 
     [SerializeField] private FloatReference _money;
     [SerializeField] private GameObject _debtUI;
-    [SerializeField] private GameObject _shopUI;
     [SerializeField] private GameEvent _updateMoney;
 
     [SerializeField] private Button _equipmentButton;
@@ -22,16 +23,18 @@ public class DebtManager : MonoBehaviour
     [SerializeField] private Button _experimentsButton;
 
     [SerializeField] private GameEvent _gameWon;
+    [SerializeField] private InputActionReference _OpenMenu;
+    [SerializeField] private InputActionReference _CloseMenu;
 
     private TextMeshProUGUI _equipmentText;
     private TextMeshProUGUI _infrastructureText;
     private TextMeshProUGUI _supliesText;
     private TextMeshProUGUI _experimentsText;
 
-    private Gamepad _gamepad;
     private EventSystem _eventsystem;
 
     private int _completedLoans;
+    private bool _canOpenMenu = true;
 
     private void Start()
     {
@@ -45,27 +48,28 @@ public class DebtManager : MonoBehaviour
         _supliesText.text = $"{_supliesText.text} ${_supliesPrice}";
         _experimentsText.text = $"{_experimentsText.text} ${_experimentsPrice}";
 
-        _gamepad = Gamepad.current;
         _eventsystem = GameObject.FindObjectOfType<EventSystem>();
+
+        _OpenMenu.action.performed += Open_Menu_Performed;
+        _CloseMenu.action.performed += Close_Menu_Performed;
     }
 
-    private void Update()
+    private void Close_Menu_Performed(InputAction.CallbackContext obj)
     {
-        if (_gamepad.buttonWest.wasPressedThisFrame || _debtUI.active == true && _gamepad.buttonEast.wasPressedThisFrame)
-        {
-            if (_debtUI.active == true)
-            {
-                _debtUI.SetActive(false);
-                Time.timeScale = 1f;
-            }
-            else
-            {
-                _eventsystem.SetSelectedGameObject(_equipmentButton.gameObject);
-                if (_shopUI.active == true) _shopUI.SetActive(false);
-                _debtUI.SetActive(true);
-                Time.timeScale = 0f;
-            }
-        }
+        if (!_debtUI.activeSelf) return;
+
+        _debtUI.SetActive(false);
+        Time.timeScale = 1f;
+        StartCoroutine(AllowOpenMenu());
+    }
+
+    private void Open_Menu_Performed(InputAction.CallbackContext obj)
+    {
+        if (_debtUI.activeSelf || !_canOpenMenu) return;
+        _canOpenMenu = false;
+        _eventsystem.SetSelectedGameObject(_equipmentButton.gameObject);
+        _debtUI.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     public void BuyEquipment()
@@ -126,5 +130,11 @@ public class DebtManager : MonoBehaviour
 
         _completedLoans += 1;
         if (_completedLoans == 4) _gameWon.Raise();
+    }
+
+    private IEnumerator AllowOpenMenu()
+    {
+        yield return new WaitForEndOfFrame();
+        _canOpenMenu = true;
     }
 }
