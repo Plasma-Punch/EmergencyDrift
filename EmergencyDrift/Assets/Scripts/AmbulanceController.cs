@@ -99,7 +99,7 @@ public class AmbulanceController : MonoBehaviour
 
     private void GasInput()
     {
-        _moveForce += transform.forward * (_moveSpeed.value * (_gasInput.value - _breakInput.value)) * Time.deltaTime;
+        _moveForce += transform.forward * (_moveSpeed.value * (_gasInput.value - _breakInput.value));
 
         _moveForce = Vector3.ClampMagnitude(_moveForce, _maxSpeed.value);
 
@@ -158,7 +158,7 @@ public class AmbulanceController : MonoBehaviour
                 skidMark.emitting = true;
             }
             if (!_driftSound.isPlaying) _driftSound.Play();
-            _moveSpeed.variable.value = 80;
+            _maxSpeed.variable.value = _moveSpeed.value + 5;
         }
         else
         {
@@ -171,7 +171,7 @@ public class AmbulanceController : MonoBehaviour
                 skidMark.emitting = false;
             }
             if (_driftSound.isPlaying) _driftSound.Stop();
-            _moveSpeed.variable.value = 55;
+            _maxSpeed.variable.value = _moveSpeed.value;
         }
     }
 

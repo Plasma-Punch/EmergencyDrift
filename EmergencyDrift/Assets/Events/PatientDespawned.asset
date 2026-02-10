@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74fb962b7271d7c46a1effc04bc8c2b9, type: 3}
-  m_Name: AmbulanceSpeed
-  m_EditorClassIdentifier: 
-  _value: 10
+  m_Script: {fileID: 11500000, guid: 0a47ce847b0f173499da43483e5682eb, type: 3}
+  m_Name: PatientDespawned
+  m_EditorClassIdentifier: Assembly-CSharp::GameEvent
