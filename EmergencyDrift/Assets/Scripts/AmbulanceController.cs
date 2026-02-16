@@ -41,6 +41,8 @@ public class AmbulanceController : MonoBehaviour
     private Rigidbody _rb;
 
     private bool _canDrift;
+    private Quaternion _targetModelLocalRotation = Quaternion.identity;
+    private float _lastSteerInput = 0f;
 
     private void Start()
     {
@@ -48,18 +50,42 @@ public class AmbulanceController : MonoBehaviour
         _healthBar.value = _health.value;
         _enginesound.pitch = 0.5f;
         _rb = GetComponent<Rigidbody>();
+        // Ensure Rigidbody interpolation is enabled for smooth visuals when physics runs in FixedUpdate
+        if (_rb != null)
+            _rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
 
     private void Update()
     {
-        GasInput();
-        DragAndTraction();
+        // Keep audio and other non-physics updates on Update for smoothness
+        UpdateEngineSound();
+
+        // Smooth visual-only model rotation in Update (interpolated between physics frames)
+        if (_model != null)
+        {
+            _model.transform.localRotation = Quaternion.Slerp(_model.transform.localRotation, _targetModelLocalRotation, Time.deltaTime * _driftSpeed);
+        }
+
+        // Handle visual/audio drift effects in Update for responsiveness
+        HandleDriftEffects(_lastSteerInput);
     }
 
     private void FixedUpdate()
     {
+        // Perform all physics and movement updates in FixedUpdate to avoid jitter
+        // Apply steering first so movement uses the updated rotation
         Steering();
-        _rb.Move(transform.position + _moveForce * Time.deltaTime, transform.rotation);
+        GasInput();
+        DragAndTraction();
+
+        // Apply movement via Rigidbody.velocity so the physics solver integrates motion smoothly
+        if (_rb != null)
+        {
+            Vector3 newVel = _moveForce;
+            // Preserve existing vertical velocity (gravity/jumps/collisions)
+            newVel.y = _rb.linearVelocity.y;
+            _rb.linearVelocity = newVel;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -99,10 +125,15 @@ public class AmbulanceController : MonoBehaviour
 
     private void GasInput()
     {
-        _moveForce += transform.forward * (_moveSpeed.value * (_gasInput.value - _breakInput.value));
+        // Use fixedDeltaTime so movement is framerate-independent
+        Vector3 forward = _rb != null ? _rb.rotation * Vector3.forward : transform.forward;
+        _moveForce += forward * (_moveSpeed.value * (_gasInput.value - _breakInput.value)) * Time.fixedDeltaTime;
 
         _moveForce = Vector3.ClampMagnitude(_moveForce, _maxSpeed.value);
+    }
 
+    private void UpdateEngineSound()
+    {
         float enginePitch;
         if (_gasInput.value == 0 && _breakInput.value == 0) enginePitch = 0.5f;
         else enginePitch = 0.5f + (_gasInput.value / 2) + (_breakInput.value / 2);
@@ -113,25 +144,24 @@ public class AmbulanceController : MonoBehaviour
     private void Steering()
     {
         float steerInput = _steeringInput.value;
-        if(_breakInput.value != 0) transform.Rotate(Vector3.up * -steerInput * _moveForce.magnitude * _steerAngle * Time.deltaTime);
-        else transform.Rotate(Vector3.up * steerInput * _moveForce.magnitude * _steerAngle * Time.deltaTime);
+        _lastSteerInput = steerInput;
+        // Rotate using Rigidbody to keep physics consistent
+        float rotationDirection = (_breakInput.value != 0) ? -steerInput : steerInput;
+        float yDelta = rotationDirection * _moveForce.magnitude * _steerAngle * Time.fixedDeltaTime;
+        _rb.MoveRotation(_rb.rotation * Quaternion.Euler(0f, yDelta, 0f));
 
         // Drifting
         if (steerInput != 0 && _gasInput.value != 0 && _canDrift)
         {
             float driftAngle = Mathf.Clamp(steerInput * 45, -45, 45) * Mathf.Clamp01(_gasInput.value);
-            Quaternion targetRotation = Quaternion.Euler(0, driftAngle, 0);
-
-            _model.transform.localRotation = Quaternion.Slerp(_model.transform.localRotation, targetRotation, Time.deltaTime * _driftSpeed);
+            _targetModelLocalRotation = Quaternion.Euler(0, driftAngle, 0);
         }
         else
         {
             // If there's no input, gradually reset the car's tilt
-            Quaternion straightRotation = Quaternion.Euler(0, 0, 0);
-            _model.transform.localRotation = Quaternion.Slerp(_model.transform.localRotation, straightRotation, Time.deltaTime * _driftSpeed);
+            _targetModelLocalRotation = Quaternion.identity;
         }
 
-        HandleDriftEffects(steerInput);
     }
 
     private void DragAndTraction()
@@ -140,9 +170,12 @@ public class AmbulanceController : MonoBehaviour
         _moveForce *= _drag;
 
         // Traction
-        Debug.DrawRay(transform.position, _moveForce.normalized * 3);
-        Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);
-        _moveForce = Vector3.Lerp(_moveForce.normalized, transform.forward, _traction * Time.deltaTime) * _moveForce.magnitude;
+        Vector3 pos = _rb != null ? _rb.position : transform.position;
+        Vector3 forward = _rb != null ? _rb.rotation * Vector3.forward : transform.forward;
+        Debug.DrawRay(pos, _moveForce.normalized * 3);
+        Debug.DrawRay(pos, forward * 3, Color.blue);
+        // Use fixedDeltaTime to keep traction calculation in the physics timestep
+        _moveForce = Vector3.Lerp(_moveForce.normalized, forward, _traction * Time.fixedDeltaTime) * _moveForce.magnitude;
     }
 
     private void HandleDriftEffects(float steerInput)

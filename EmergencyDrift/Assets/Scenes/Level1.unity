@@ -41515,9 +41515,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 2
+  m_CollisionDetection: 1
 --- !u!114 &1449082755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44997,10 +44997,10 @@ MonoBehaviour:
     constantValue: 100
     variable: {fileID: 11400000, guid: c0bf00fdebf4e9346b3a838c44c3fb49, type: 2}
   - useConstant: 1
-    constantValue: 10
+    constantValue: 15
     variable: {fileID: 11400000, guid: cf2d5f7a43726584c89d7131d78862a3, type: 2}
   - useConstant: 1
-    constantValue: 10
+    constantValue: 15
     variable: {fileID: 11400000, guid: e6a9fe15ee2448c4281003d29a8b6007, type: 2}
 --- !u!4 &1561506938
 Transform:

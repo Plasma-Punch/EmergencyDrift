@@ -20,13 +20,13 @@ public class DriftCam : MonoBehaviour
     {
         rb = target.GetComponent<Rigidbody>();
 
-        // Stable starting position
-        Vector3 startPos = target.position
-                           - target.forward * distance
+        // Stable starting position — use Rigidbody values so camera follows interpolated physics pose
+        Vector3 startPos = rb.position
+                           - rb.transform.forward * distance
                            + Vector3.up * height;
 
         transform.position = startPos;
-        transform.rotation = Quaternion.LookRotation(target.forward, Vector3.up);
+        transform.rotation = Quaternion.LookRotation(rb.transform.forward, Vector3.up);
 
         // Wait 1 frame so Unity finishes all transforms
 
@@ -38,12 +38,13 @@ public class DriftCam : MonoBehaviour
         if (!ready || !target) return;
 
         // --- DESIRED POSITION ---
-        Vector3 desiredPos = target.position
-                             - target.forward * distance
+        // Use Rigidbody position/rotation so we sample the interpolated physics pose
+        Vector3 desiredPos = rb.position
+                             - rb.transform.forward * distance
                              + Vector3.up * height;
 
         // --- COLLISION CHECK ---
-        if (Physics.Linecast(target.position + Vector3.up * 1.5f, desiredPos, out RaycastHit hit, collisionMask))
+        if (Physics.Linecast(rb.position + Vector3.up * 1.5f, desiredPos, out RaycastHit hit, collisionMask))
         {
             desiredPos = hit.point + hit.normal * 0.5f;
         }
@@ -52,7 +53,7 @@ public class DriftCam : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, desiredPos, followSmooth * Time.deltaTime);
 
         // --- SAFE LOOK DIRECTION ---
-        Vector3 lookDir = (target.position + Vector3.up * 1.5f) - transform.position;
+        Vector3 lookDir = (rb.position + Vector3.up * 1.5f) - transform.position;
 
         // Prevent vertical look direction (causes flips)
         if (Mathf.Abs(Vector3.Dot(lookDir.normalized, Vector3.up)) > 0.95f)
