@@ -156,7 +156,8 @@ public class AmbulanceController : MonoBehaviour
         _rb.MoveRotation(_rb.rotation * Quaternion.Euler(0f, yDelta, 0f));
 
         // Drifting
-        if (steerInput >= _minDriftInput && _gasInput.value != 0 && _canDrift)
+        // Use absolute steer input so drifting works for both left (negative) and right (positive) steering
+        if (Mathf.Abs(steerInput) >= _minDriftInput && _gasInput.value != 0 && _canDrift)
         {
             float driftAngle = Mathf.Clamp(steerInput * 35, -35, 35) * Mathf.Clamp01(_gasInput.value);
             _targetModelLocalRotation = Quaternion.Euler(0, driftAngle, 0);
