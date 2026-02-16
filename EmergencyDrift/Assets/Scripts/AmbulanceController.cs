@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
 using System.Collections.Generic;
+using TMPro;
 
 public class AmbulanceController : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class AmbulanceController : MonoBehaviour
     [SerializeField] private FloatReference _health;
     [SerializeField] private GameObject _HealthBarObject;
     [SerializeField] private GameEvent _died;
+
+    [SerializeField] private TextMeshProUGUI _speeedText;
 
     private Vector3 _moveForce;
     private Slider _healthBar;
@@ -129,6 +132,7 @@ public class AmbulanceController : MonoBehaviour
         Vector3 forward = _rb != null ? _rb.rotation * Vector3.forward : transform.forward;
         _moveForce += forward * (_moveSpeed.value * (_gasInput.value - _breakInput.value)) * Time.fixedDeltaTime;
 
+        _speeedText.text = $"{_moveForce.magnitude}";
         _moveForce = Vector3.ClampMagnitude(_moveForce, _maxSpeed.value);
     }
 

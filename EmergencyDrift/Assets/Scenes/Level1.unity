@@ -44997,10 +44997,10 @@ MonoBehaviour:
     constantValue: 100
     variable: {fileID: 11400000, guid: c0bf00fdebf4e9346b3a838c44c3fb49, type: 2}
   - useConstant: 1
-    constantValue: 15
+    constantValue: 25
     variable: {fileID: 11400000, guid: cf2d5f7a43726584c89d7131d78862a3, type: 2}
   - useConstant: 1
-    constantValue: 15
+    constantValue: 25
     variable: {fileID: 11400000, guid: e6a9fe15ee2448c4281003d29a8b6007, type: 2}
 --- !u!4 &1561506938
 Transform:
