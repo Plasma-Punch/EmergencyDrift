@@ -23,6 +23,7 @@ public class AmbulanceController : MonoBehaviour
     [SerializeField] private float _steerAngle = 30f;
     [SerializeField] private float _traction = 2f;
     [SerializeField] private float _driftSpeed = 2f;
+    [SerializeField, Range(0,1)] private float _minDriftInput;
     [SerializeField] private AudioSource _driftSound;
     [SerializeField] private List<VisualEffect> _tireSmoke = new List<VisualEffect>();
     [SerializeField] private List<TrailRenderer> _tireMarks = new List<TrailRenderer>();
@@ -155,9 +156,9 @@ public class AmbulanceController : MonoBehaviour
         _rb.MoveRotation(_rb.rotation * Quaternion.Euler(0f, yDelta, 0f));
 
         // Drifting
-        if (steerInput != 0 && _gasInput.value != 0 && _canDrift)
+        if (steerInput >= _minDriftInput && _gasInput.value != 0 && _canDrift)
         {
-            float driftAngle = Mathf.Clamp(steerInput * 45, -45, 45) * Mathf.Clamp01(_gasInput.value);
+            float driftAngle = Mathf.Clamp(steerInput * 35, -35, 35) * Mathf.Clamp01(_gasInput.value);
             _targetModelLocalRotation = Quaternion.Euler(0, driftAngle, 0);
         }
         else
@@ -184,7 +185,7 @@ public class AmbulanceController : MonoBehaviour
 
     private void HandleDriftEffects(float steerInput)
     {
-        if (steerInput >= 0.35f && _gasInput.value != 0 && _canDrift || steerInput <= -0.35f && _gasInput.value != 0 && _canDrift)
+        if (steerInput >= _minDriftInput && _gasInput.value != 0 && _canDrift || steerInput <= -_minDriftInput && _gasInput.value != 0 && _canDrift)
         {
             foreach(VisualEffect smoke in _tireSmoke)
             {

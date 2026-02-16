@@ -17,21 +17,21 @@
                 },
                 {
                     "name": "Break",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "22e4a049-6063-439b-ae7e-c56a6db464dc",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Gas",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "d073c795-c11f-4eaa-9bd2-9456ce2b3cc6",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Drift",
